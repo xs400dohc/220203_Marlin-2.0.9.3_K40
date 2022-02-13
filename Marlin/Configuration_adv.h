@@ -224,7 +224,7 @@
 //
 // Laser Cooler options
 //
-#if TEMP_SENSOR_COOLER
+#if TEMP_SENSOR_COOLER  //Benny 220203 #############################################################
   #define COOLER_MINTEMP           8  // (°C)
   #define COOLER_MAXTEMP          26  // (°C)
   #define COOLER_DEFAULT_TEMP     16  // (°C)
@@ -336,14 +336,14 @@
 #endif
 
 /**
- * Thermal Protection parameters for the laser cooler.
+ * Thermal Protection parameters for the laser cooler.  //Benny 220203 #############################################################
  */
 #if ENABLED(THERMAL_PROTECTION_COOLER)
   #define THERMAL_PROTECTION_COOLER_PERIOD     10 // Seconds
   #define THERMAL_PROTECTION_COOLER_HYSTERESIS  3 // Degrees Celsius
 
   /**
-   * Laser cooling watch settings (M143/M193).
+   * Laser cooling watch settings (M143/M193).  //Benny 220203 #############################################################
    */
   #define WATCH_COOLER_TEMP_PERIOD             60 // Seconds
   #define WATCH_COOLER_TEMP_INCREASE            3 // Degrees Celsius
@@ -2321,7 +2321,7 @@
  * - During Hold all Emergency Parser commands are available, as usual.
  * - Enable NANODLP_Z_SYNC and NANODLP_ALL_AXIS for move command end-state reports.
  */
-//#define REALTIME_REPORTING_COMMANDS
+//#define REALTIME_REPORTING_COMMANDS //Benny 220203 #############################################################
 #if ENABLED(REALTIME_REPORTING_COMMANDS)
   //#define FULL_REPORT_TO_HOST_FEATURE   // Auto-report the machine status like Grbl CNC
 #endif
@@ -3439,7 +3439,7 @@
  * See https://marlinfw.org/docs/configuration/laser_spindle.html for more config details.
  */
 //#define SPINDLE_FEATURE
-//#define LASER_FEATURE
+#define LASER_FEATURE //Benny 220203 #############################################################
 #if EITHER(SPINDLE_FEATURE, LASER_FEATURE)
   #define SPINDLE_LASER_ACTIVE_STATE    LOW    // Set to "HIGH" if SPINDLE_LASER_ENA_PIN is active HIGH
 
@@ -3449,16 +3449,16 @@
     #define SPINDLE_LASER_FREQUENCY     2500   // (Hz) Spindle/laser frequency (only on supported HALs: AVR and LPC)
   #endif
 
-  //#define AIR_EVACUATION                     // Cutter Vacuum / Laser Blower motor control with G-codes M10-M11
+  #define AIR_EVACUATION                     // Cutter Vacuum / Laser Blower motor control with G-codes M10-M11 //Benny 220203 #############################################################
   #if ENABLED(AIR_EVACUATION)
     #define AIR_EVACUATION_ACTIVE       LOW    // Set to "HIGH" if the on/off function is active HIGH
-    //#define AIR_EVACUATION_PIN        42     // Override the default Cutter Vacuum or Laser Blower pin
+    #define AIR_EVACUATION_PIN        P2_03     // Override the default Cutter Vacuum or Laser Blower pin  //Benny 220203 #############################################################
   #endif
 
-  //#define AIR_ASSIST                         // Air Assist control with G-codes M8-M9
+  #define AIR_ASSIST                         // Air Assist control with G-codes M8-M9 //Benny 220203 #############################################################
   #if ENABLED(AIR_ASSIST)
     #define AIR_ASSIST_ACTIVE           LOW    // Active state on air assist pin
-    //#define AIR_ASSIST_PIN            44     // Override the default Air Assist pin
+    #define AIR_ASSIST_PIN            P1_25     // Override the default Air Assist pin //Benny 220203 #############################################################
   #endif
 
   //#define SPINDLE_SERVO                      // A servo converting an angle to spindle power
@@ -3519,7 +3519,7 @@
       #define SPEED_POWER_STARTUP        80    // (%) M3/M4 speed/power default (with no arguments)
     #endif
 
-    // Define the minimum and maximum test pulse time values for a laser test fire function
+    // Define the minimum and maximum test pulse time values for a laser test fire function //Benny 220203 #############################################################
     #define LASER_TEST_PULSE_MIN           1   // Used with Laser Control Menu
     #define LASER_TEST_PULSE_MAX         999   // Caution: Menu may not show more than 3 characters
 
@@ -3531,7 +3531,7 @@
      * This allows the laser to keep in perfect sync with the planner and removes
      * the powerup/down delay since lasers require negligible time.
      */
-    //#define LASER_POWER_INLINE
+    #define LASER_POWER_INLINE  //Benny 220203 #############################################################
 
     #if ENABLED(LASER_POWER_INLINE)
       /**
@@ -3564,7 +3564,7 @@
       /**
        * Include laser power in G0/G1/G2/G3/G5 commands with the 'S' parameter
        */
-      //#define LASER_MOVE_POWER
+      #define LASER_MOVE_POWER  //Benny 220203 #############################################################
 
       #if ENABLED(LASER_MOVE_POWER)
         // Turn off the laser on G0 moves with no power parameter.
@@ -3572,7 +3572,7 @@
         //#define LASER_MOVE_G0_OFF
 
         // Turn off the laser on G28 homing.
-        //#define LASER_MOVE_G28_OFF
+        #define LASER_MOVE_G28_OFF  //Benny 220203 #############################################################
       #endif
 
       /**
@@ -3581,7 +3581,7 @@
        * WARNING: M5 will NOT turn off the laser unless another move
        *          is done (so G-code files must end with 'M5 I').
        */
-      //#define LASER_POWER_INLINE_INVERT
+      //#define LASER_POWER_INLINE_INVERT //Benny 220203 #############################################################
 
       /**
        * Continuously apply inline power. ('M3 S3' == 'G1 S3' == 'M3 S3 I')
@@ -3611,7 +3611,7 @@
 #endif // SPINDLE_FEATURE || LASER_FEATURE
 
 /**
- * Synchronous Laser Control with M106/M107
+ * Synchronous Laser Control with M106/M107 //Benny 220203 #############################################################
  *
  * Marlin normally applies M106/M107 fan speeds at a time "soon after" processing
  * a planner block. This is too inaccurate for a PWM/TTL laser attached to the fan
@@ -3620,7 +3620,7 @@
  *
  * NOTE: This option sacrifices some cooling fan speed options.
  */
-//#define LASER_SYNCHRONOUS_M106_M107
+#define LASER_SYNCHRONOUS_M106_M107 //Benny 220203 #############################################################
 
 /**
  * Coolant Control
