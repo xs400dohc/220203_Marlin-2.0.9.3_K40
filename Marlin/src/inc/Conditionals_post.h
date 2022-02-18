@@ -513,6 +513,11 @@
       #else
         #define TEMP_REDUNDANT_PIN TEMP_COOLER_PIN
       #endif
+    #elif !PIN_EXISTS(TEMP_COOLER2)
+        #error "TEMP_SENSOR_REDUNDANT_SOURCE set to COOLER2 requires TEMP_COOLER2_PIN."
+      #else
+        #define TEMP_REDUNDANT_PIN TEMP_COOLER2_PIN
+      #endif
     #elif REDUNDANT_TEMP_MATCH(SOURCE, PROBE)
       #if !PIN_EXISTS(TEMP_PROBE)
         #error "TEMP_SENSOR_REDUNDANT_SOURCE set to PROBE requires TEMP_PROBE_PIN."
@@ -2431,6 +2436,12 @@
 #if HAS_ADC_TEST(COOLER)
   #define HAS_TEMP_ADC_COOLER 1
 #endif
+#if HAS_ADC_TEST(COOLER2)
+  #define HAS_TEMP_ADC_COOLER2 1
+#endif
+#if HAS_ADC_TEST(COOLER2)
+  #define HAS_TEMP_ADC_COOLER2 1
+#endif
 #if HAS_ADC_TEST(BOARD)
   #define HAS_TEMP_ADC_BOARD 1
 #endif
@@ -2453,6 +2464,9 @@
 #endif
 #if HAS_TEMP(COOLER)
   #define HAS_TEMP_COOLER 1
+#endif
+#if HAS_TEMP(COOLER2)
+  #define HAS_TEMP_COOLER2 1
 #endif
 #if HAS_TEMP(BOARD)
   #define HAS_TEMP_BOARD 1

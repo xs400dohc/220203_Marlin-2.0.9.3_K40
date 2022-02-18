@@ -111,6 +111,9 @@ enum ADCSensorState : char {
   #if HAS_TEMP_ADC_COOLER
     PrepareTemp_COOLER, MeasureTemp_COOLER,
   #endif
+  #if HAS_TEMP_ADC_COOLER2
+    PrepareTemp_COOLER2, MeasureTemp_COOLER2,
+  #endif
   #if HAS_TEMP_ADC_PROBE
     PrepareTemp_PROBE, MeasureTemp_PROBE,
   #endif
@@ -374,6 +377,9 @@ class Temperature {
     #if HAS_TEMP_COOLER
       static cooler_info_t temp_cooler;
     #endif
+    #if HAS_TEMP_COOLER2
+      static cooler_info_t temp_cooler2;
+    #endif
     #if HAS_TEMP_BOARD
       static board_info_t temp_board;
     #endif
@@ -607,6 +613,9 @@ class Temperature {
     #endif
     #if HAS_TEMP_COOLER
       static celsius_float_t analog_to_celsius_cooler(const int16_t raw);
+    #endif
+    #if HAS_TEMP_COOLER2
+      static celsius_float_t analog_to_celsius_cooler2(const int16_t raw);
     #endif
     #if HAS_TEMP_BOARD
       static celsius_float_t analog_to_celsius_board(const int16_t raw);

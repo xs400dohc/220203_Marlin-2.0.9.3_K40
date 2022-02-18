@@ -232,7 +232,10 @@
   #define COOLER_PIN               8  // Laser cooler on/off pin used to control power to the cooling element (e.g., TEC, External chiller via relay)
   #define COOLER_INVERTING     false
   #define TEMP_COOLER_PIN         P0_25  // Laser/Cooler-circuit temperature sensor pin. ADC is required.
-  #define TEMP_COOLER_FAN_PIN     P0_24 // Fan-circuit temperature sensor pin
+  #define COOLER2                    // define if there is a 2 circuit cooling system
+  #if ENABLED(COOLER2)
+    #define TEMP_COOLER2_PIN     P0_24 // Fan-circuit temperature sensor pin
+  #endif //COOLER2
   #define COOLER_FAN                  // Enable a fan on the cooler, Fan# 0,1,2,3 etc.
   #define COOLER_FAN_INDEX         0  // FAN number 0, 1, 2 etc. e.g.
   #if ENABLED(COOLER_FAN)

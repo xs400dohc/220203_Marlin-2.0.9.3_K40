@@ -456,6 +456,9 @@ PGMSTR(str_t_heating_failed, STR_T_HEATING_FAILED);
 
 #if HAS_TEMP_COOLER
   cooler_info_t Temperature::temp_cooler; // = { 0 }
+  #if HAS_TEMP_COOLER
+    cooler_info_t Temperature::temp_cooler2; // = { 0 }
+  #endif
   #if HAS_COOLER
     bool flag_cooler_state;
     //bool flag_cooler_excess = false;
@@ -2000,6 +2003,24 @@ void Temperature::manage_heater() {
   }
 #endif // HAS_TEMP_COOLER
 
+#if HAS_TEMP_COOLER2
+  // For cooler temperature measurement.
+  celsius_float_t Temperature::analog_to_celsius_cooler2(const int16_t raw) {
+    #if TEMP_SENSOR_COOLER2_IS_CUSTOM
+      return user_thermistor_to_deg_c(CTI_COOLER, raw);
+    #elif TEMP_SENSOR_COOLER2_IS_THERMISTOR
+      SCAN_THERMISTOR_TABLE(TEMPTABLE_COOLER2, TEMPTABLE_COOLER2_LEN);
+    #elif TEMP_SENSOR_COOLER2_IS_AD595
+      return TEMP_AD595(raw);
+    #elif TEMP_SENSOR_COOLER2_IS_AD8495
+      return TEMP_AD8495(raw);
+    #else
+      UNUSED(raw);
+      return 0;
+    #endif
+  }
+#endif // HAS_TEMP_COOLER
+
 #if HAS_TEMP_PROBE
   // For probe temperature measurement.
   celsius_float_t Temperature::analog_to_celsius_probe(const int16_t raw) {
@@ -2085,6 +2106,7 @@ void Temperature::updateTemperaturesFromRawValues() {
   TERN_(HAS_HEATED_BED,     temp_bed.celsius       = analog_to_celsius_bed(temp_bed.raw));
   TERN_(HAS_TEMP_CHAMBER,   temp_chamber.celsius   = analog_to_celsius_chamber(temp_chamber.raw));
   TERN_(HAS_TEMP_COOLER,    temp_cooler.celsius    = analog_to_celsius_cooler(temp_cooler.raw));
+  TERN_(HAS_TEMP_COOLER2,   temp_cooler2.celsius   = analog_to_celsius_cooler2(temp_cooler2.raw));
   TERN_(HAS_TEMP_PROBE,     temp_probe.celsius     = analog_to_celsius_probe(temp_probe.raw));
   TERN_(HAS_TEMP_BOARD,     temp_board.celsius     = analog_to_celsius_board(temp_board.raw));
   TERN_(HAS_TEMP_REDUNDANT, temp_redundant.celsius = analog_to_celsius_redundant(temp_redundant.raw));
@@ -2372,6 +2394,9 @@ void Temperature::init() {
   #endif
   #if HAS_TEMP_ADC_COOLER
     HAL_ANALOG_SELECT(TEMP_COOLER_PIN);
+  #endif
+  #if HAS_TEMP_ADC_COOLER2
+    HAL_ANALOG_SELECT(TEMP_COOLER2_PIN);
   #endif
   #if HAS_TEMP_ADC_PROBE
     HAL_ANALOG_SELECT(TEMP_PROBE_PIN);
@@ -3381,6 +3406,11 @@ void Temperature::isr() {
     #if HAS_TEMP_ADC_COOLER
       case PrepareTemp_COOLER: HAL_START_ADC(TEMP_COOLER_PIN); break;
       case MeasureTemp_COOLER: ACCUMULATE_ADC(temp_cooler); break;
+    #endif
+
+    #if HAS_TEMP_ADC_COOLER2
+      case PrepareTemp_COOLER2: HAL_START_ADC(TEMP_COOLER2_PIN); break;
+      case MeasureTemp_COOLER2: ACCUMULATE_ADC(temp_cooler2); break;
     #endif
 
     #if HAS_TEMP_ADC_PROBE

@@ -852,6 +852,11 @@
 #else
   #define _COOLER_TEMP
 #endif
+#if TEMP_SENSOR_COOLER2 && PIN_EXISTS(TEMP_COOLER2)
+  #define _COOLER2_TEMP DIO_PIN(TEMP_COOLER2_PIN),
+#else
+  #define _COOLER2_TEMP
+#endif
 #if TEMP_SENSOR_COOLER && PIN_EXISTS(COOLER)
   #define _COOLER COOLER_PIN,
 #else
