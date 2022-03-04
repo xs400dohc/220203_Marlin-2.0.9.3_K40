@@ -64,3 +64,20 @@ typedef uint32_t millis_t;              //millis_t ist 32bit
       }
   };
   extern Temperature thermalManager;
+
+#if ENABLED(COOLER_FAN)
+            #if ENABLED(COOLER2)
+              int16_t fan_cooler_pwm;
+              if (temp_cooler2.celsius - COOLER_FAN_DIFF > temp_cooler.celsius){
+                fan_cooler_pwm = (COOLER_FAN_BASE) + (COOLER_FAN_FACTOR) * ABS((temp_cooler2.celsius - COOLER_FAN_DIFF) - temp_cooler.celsius);
+              }
+              else{
+                fan_cooler_pwm = 0;
+              }
+              NOMORE(fan_cooler_pwm, 255);
+              set_fan_speed(COOLER_FAN_INDEX, fan_cooler_pwm); // Set cooler fan pwm
+              cooler_fan_flush_ms = ms + 5000;
+            #else
+              set_fan_speed(COOLER_FAN_INDEX, temp_cooler.celsius > temp_cooler.target - 2 ? COOLER_FAN_BASE : 0);
+            #endif
+          #endif

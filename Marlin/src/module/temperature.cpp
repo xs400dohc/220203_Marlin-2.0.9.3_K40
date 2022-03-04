@@ -1640,7 +1640,7 @@ void Temperature::manage_heater() {
         if (temp_cooler.celsius > temp_cooler.target) {
           temp_cooler.soft_pwm_amount = temp_cooler.celsius > temp_cooler.target ? MAX_COOLER_POWER : 0;
           flag_cooler_state = temp_cooler.soft_pwm_amount > 0 ? true : false; // used to allow M106 fan control when cooler is disabled
-          #if ENABLED(COOLER_FAN)
+          #if ENABLED(COOLER_FAN) && !ENABLED(COOLER2)
             int16_t fan_cooler_pwm = (COOLER_FAN_BASE) + (COOLER_FAN_FACTOR) * ABS(temp_cooler.celsius - temp_cooler.target);
             NOMORE(fan_cooler_pwm, 255);
             set_fan_speed(COOLER_FAN_INDEX, fan_cooler_pwm); // Set cooler fan pwm
@@ -1649,18 +1649,35 @@ void Temperature::manage_heater() {
         }
         else {
           temp_cooler.soft_pwm_amount = 0;
-          #if ENABLED(COOLER_FAN)
+          #if ENABLED(COOLER_FAN) && !ENABLED(COOLER2)
             set_fan_speed(COOLER_FAN_INDEX, temp_cooler.celsius > temp_cooler.target - 2 ? COOLER_FAN_BASE : 0);
           #endif
           WRITE_HEATER_COOLER(LOW);
         }
+        #if ENABLED(COOLER_FAN) && ENABLED(COOLER2)
+          int16_t fan_cooler_pwm;
+          if (temp_cooler2.celsius - COOLER_FAN_DIFF > temp_cooler.celsius){
+            fan_cooler_pwm = (COOLER_FAN_BASE) + (COOLER_FAN_FACTOR) * ABS((temp_cooler2.celsius - COOLER_FAN_DIFF) - temp_cooler.celsius);
+          }
+          else if (temp_cooler2.celsius - 1 > temp_cooler.celsius){
+            fan_cooler_pwm = (COOLER_FAN_BASE);
+          }
+          else{
+            fan_cooler_pwm = 0;
+          }
+          NOMORE(fan_cooler_pwm, 255);
+          set_fan_speed(COOLER_FAN_INDEX, fan_cooler_pwm); // Set cooler fan pwm
+          cooler_fan_flush_ms = ms + 5000;
+        #endif
       }
     }
     else {
       temp_cooler.soft_pwm_amount = 0;
       if (flag_cooler_state) {
         flag_cooler_state = false;
-        thermalManager.set_fan_speed(COOLER_FAN_INDEX, 0);
+        #if !ENABLED(COOLER2)
+          thermalManager.set_fan_speed(COOLER_FAN_INDEX, 0);
+        #endif
       }
       WRITE_HEATER_COOLER(LOW);
     }

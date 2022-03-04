@@ -232,10 +232,13 @@
   #define COOLER_PIN               8  // Laser cooler on/off pin used to control power to the cooling element (e.g., TEC, External chiller via relay)
   #define COOLER_INVERTING     false
   #define TEMP_COOLER_PIN         P0_25  // Laser/Cooler-circuit temperature sensor pin. ADC is required.
-  #define COOLER2                    // define if there is a 2 circuit cooling system
-  #if ENABLED(COOLER2)
-    #define TEMP_COOLER2_PIN     P0_24 // Fan-circuit temperature sensor pin
-  #endif //COOLER2
+  #if TEMP_SENSOR_COOLER2
+    #define COOLER2                    // define if there is a 2 circuit cooling system
+    #if ENABLED(COOLER2)
+      #define TEMP_COOLER2_PIN     P0_24 // Fan-circuit temperature sensor pin
+      #define COOLER_FAN_DIFF        3  //
+    #endif //COOLER2
+  #endif
   #define COOLER_FAN                  // Enable a fan on the cooler, Fan# 0,1,2,3 etc.
   #define COOLER_FAN_INDEX         0  // FAN number 0, 1, 2 etc. e.g.
   #if ENABLED(COOLER_FAN)
@@ -1332,8 +1335,8 @@
     #define LED_COLOR_PRESETS                 // Enable the Preset Color menu option
     //#define NEO2_COLOR_PRESETS              // Enable a second NeoPixel Preset Color menu option
     #if ENABLED(LED_COLOR_PRESETS)
-      #define LED_USER_PRESET_RED        255  // User defined RED value
-      #define LED_USER_PRESET_GREEN      128  // User defined GREEN value
+      #define LED_USER_PRESET_RED          0  // User defined RED value
+      #define LED_USER_PRESET_GREEN      255  // User defined GREEN value
       #define LED_USER_PRESET_BLUE         0  // User defined BLUE value
       #define LED_USER_PRESET_WHITE      255  // User defined WHITE value
       #define LED_USER_PRESET_BRIGHTNESS 255  // User defined intensity
@@ -2337,7 +2340,7 @@
 //#define NO_TIMEOUTS 1000 // Milliseconds
 
 // Some clients will have this feature soon. This could make the NO_TIMEOUTS unnecessary.
-//#define ADVANCED_OK
+#define ADVANCED_OK
 
 // Printrun may have trouble receiving long strings all at once.
 // This option inserts short delays between lines of serial output.
@@ -3456,13 +3459,13 @@
   #define AIR_EVACUATION                     // Cutter Vacuum / Laser Blower motor control with G-codes M10-M11 //Benny 220203 #############################################################
   #if ENABLED(AIR_EVACUATION)
     #define AIR_EVACUATION_ACTIVE       LOW    // Set to "HIGH" if the on/off function is active HIGH
-    #define AIR_EVACUATION_PIN        P2_03     // Override the default Cutter Vacuum or Laser Blower pin  //Benny 220203 #############################################################
+    #define AIR_EVACUATION_PIN        P1_00     // Override the default Cutter Vacuum or Laser Blower pin  //Benny 220203 #############################################################
   #endif
 
   #define AIR_ASSIST                         // Air Assist control with G-codes M8-M9 //Benny 220203 #############################################################
   #if ENABLED(AIR_ASSIST)
     #define AIR_ASSIST_ACTIVE           LOW    // Active state on air assist pin
-    #define AIR_ASSIST_PIN            P1_25     // Override the default Air Assist pin //Benny 220203 #############################################################
+    #define AIR_ASSIST_PIN            P2_04     // Override the default Air Assist pin //Benny 220203 #############################################################
   #endif
 
   //#define SPINDLE_SERVO                      // A servo converting an angle to spindle power
@@ -3822,7 +3825,7 @@
  * High feedrates may cause ringing and harm print quality.
  */
 //#define PAREN_COMMENTS      // Support for parentheses-delimited comments
-//#define GCODE_MOTION_MODES  // Remember the motion mode (G0 G1 G2 G3 G5 G38.X) and apply for X Y Z E F, etc.
+#define GCODE_MOTION_MODES  // Remember the motion mode (G0 G1 G2 G3 G5 G38.X) and apply for X Y Z E F, etc.
 
 // Enable and set a (default) feedrate for all G0 moves
 //#define G0_FEEDRATE 3000 // (mm/min)

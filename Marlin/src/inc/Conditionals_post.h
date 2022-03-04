@@ -513,7 +513,7 @@
       #else
         #define TEMP_REDUNDANT_PIN TEMP_COOLER_PIN
       #endif
-    #elif !PIN_EXISTS(TEMP_COOLER2)
+    #elif REDUNDANT_TEMP_MATCH(SOURCE, COOLER2)
       #if !PIN_EXISTS(TEMP_COOLER2)
         #error "TEMP_SENSOR_REDUNDANT_SOURCE set to COOLER2 requires TEMP_COOLER2_PIN."
       #else
