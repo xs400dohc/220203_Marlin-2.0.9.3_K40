@@ -3634,7 +3634,7 @@
  *
  * NOTE: This option sacrifices some cooling fan speed options.
  */
-#define LASER_SYNCHRONOUS_M106_M107 //Benny 220203 #############################################################
+//#define LASER_SYNCHRONOUS_M106_M107 //Benny 220203 #############################################################
 
 /**
  * Coolant Control
