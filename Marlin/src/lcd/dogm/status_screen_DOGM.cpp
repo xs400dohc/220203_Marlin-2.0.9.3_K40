@@ -405,6 +405,13 @@ FORCE_INLINE void _draw_centered_temp(const celsius_t temp, const uint8_t tx, co
   }
 #endif
 
+#if DO_DRAW_COOLER2
+  FORCE_INLINE void _draw_cooler2_status() {
+    if (PAGE_CONTAINS(28 - INFO_FONT_ASCENT, 28 - 1))
+      _draw_centered_temp(thermalManager.wholeDegCooler2(), STATUS_COOLER2_TEXT_X, 28);
+  }
+#endif
+
 #if DO_DRAW_FLOWMETER
   FORCE_INLINE void _draw_flowmeter_status() {
     if (PAGE_CONTAINS(28 - INFO_FONT_ASCENT, 28 - 1))
@@ -680,6 +687,14 @@ void MarlinUI::draw_status_screen() {
         u8g.drawBitmapP(STATUS_COOLER_X, coolery, STATUS_COOLER_BYTEWIDTH, coolerh, blink && cooler.enabled ? status_cooler_bmp2 : status_cooler_bmp1);
     #endif
 
+    // Laser Cooler2
+    #if DO_DRAW_COOLER2
+      const uint8_t cooler2y = STATUS_COOLER2_Y(status_cooler2_bmp1),
+                    cooler2h = STATUS_COOLER2_HEIGHT(status_cooler2_bmp1);
+      if (PAGE_CONTAINS(cooler2y, cooler2y + cooler2h - 1))
+        u8g.drawBitmapP(STATUS_COOLER2_X, cooler2y, STATUS_COOLER2_BYTEWIDTH, cooler2h, blink && cooler.enabled ? status_cooler2_bmp2 : status_cooler2_bmp1);
+    #endif
+
     // Laser Cooler Flow Meter
     #if DO_DRAW_FLOWMETER
       const uint8_t flowmetery = STATUS_FLOWMETER_Y(status_flowmeter_bmp1),
@@ -704,6 +719,9 @@ void MarlinUI::draw_status_screen() {
 
     // Cooler
     TERN_(DO_DRAW_COOLER, _draw_cooler_status());
+
+    // Cooler2
+    TERN_(DO_DRAW_COOLER2, _draw_cooler2_status());
 
     // Flowmeter
     TERN_(DO_DRAW_FLOWMETER, _draw_flowmeter_status());

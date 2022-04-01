@@ -36,6 +36,7 @@ typedef uint32_t millis_t;              //millis_t ist 32bit
       static cooler_watch_t watch_cooler; //aktualisierungsrate 
       static millis_t next_cooler_check_ms, cooler_fan_flush_ms;
       static int16_t mintemp_raw_COOLER, maxtemp_raw_COOLER;
+      static int16_t mintemp_raw_COOLER2, maxtemp_raw_COOLER2;
     //Funktionen
     public:
       void init();

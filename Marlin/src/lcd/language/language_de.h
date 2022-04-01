@@ -93,6 +93,11 @@ namespace Language_de {
   LSTR MSG_LASER_POWER                    = _UxGT("Laserleistung");
   LSTR MSG_SPINDLE_MENU                   = _UxGT("Spindel-Steuerung");
   LSTR MSG_SPINDLE_POWER                  = _UxGT("Spindelleistung");
+  LSTR MSG_LASER_TOGGLE                   = _UxGT("Laser");
+  LSTR MSG_LASER_EVAC_TOGGLE              = _UxGT("Absaugung");
+  LSTR MSG_LASER_ASSIST_TOGGLE            = _UxGT("Air Assist");
+  LSTR MSG_LASER_PULSE_MS                 = _UxGT("Test Puls ms");
+  LSTR MSG_LASER_FIRE_PULSE               = _UxGT("Feuer Puls");
   LSTR MSG_SPINDLE_REVERSE                = _UxGT("Spindelrichtung");
   LSTR MSG_SWITCH_PS_ON                   = _UxGT("Netzteil ein");
   LSTR MSG_SWITCH_PS_OFF                  = _UxGT("Netzteil aus");
@@ -240,6 +245,8 @@ namespace Language_de {
   LSTR MSG_NOZZLE_STANDBY                 = _UxGT("Düse bereit");
   LSTR MSG_BED                            = _UxGT("Bett");
   LSTR MSG_CHAMBER                        = _UxGT("Gehäuse");
+  LSTR MSG_COOLER                         = _UxGT("Laserkühlung");
+  LSTR MSG_COOLER_TOGGLE                  = _UxGT("Kühler umschalten");
   LSTR MSG_FAN_SPEED                      = _UxGT("Lüfter");
   LSTR MSG_FAN_SPEED_N                    = _UxGT("Lüfter ~");
   LSTR MSG_STORED_FAN_N                   = _UxGT("Gespeich. Lüfter ~");
@@ -458,6 +465,7 @@ namespace Language_de {
   LSTR MSG_BED_COOLING                    = _UxGT("Bett kühlt...");
   LSTR MSG_CHAMBER_HEATING                = _UxGT("Gehäuse heizt...");
   LSTR MSG_CHAMBER_COOLING                = _UxGT("Gehäuse kühlt...");
+  LSTR MSG_LASER_COOLING                  = _UxGT("Laser kühlt...");
   LSTR MSG_DELTA_CALIBRATE                = _UxGT("Delta kalibrieren");
   LSTR MSG_DELTA_CALIBRATE_X              = _UxGT("Kalibriere X");
   LSTR MSG_DELTA_CALIBRATE_Y              = _UxGT("Kalibriere Y");

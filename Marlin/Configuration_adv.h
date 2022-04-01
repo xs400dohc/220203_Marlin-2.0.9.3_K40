@@ -119,6 +119,12 @@
   #define COOLER_BETA                 3950    // Beta value
 #endif
 
+#if TEMP_SENSOR_COOLER2 == 1000
+  #define COOLER2_PULLUP_RESISTOR_OHMS 4700    // Pullup resistor
+  #define COOLER2_RESISTANCE_25C_OHMS  100000  // Resistance at 25C
+  #define COOLER2_BETA                 3950    // Beta value
+#endif
+
 #if TEMP_SENSOR_PROBE == 1000
   #define PROBE_PULLUP_RESISTOR_OHMS   4700    // Pullup resistor
   #define PROBE_RESISTANCE_25C_OHMS    100000  // Resistance at 25C
@@ -225,18 +231,18 @@
 // Laser Cooler options
 //
 #if TEMP_SENSOR_COOLER  //Benny 220203 #############################################################
-  #define COOLER_MINTEMP           8  // (°C)
-  #define COOLER_MAXTEMP          26  // (°C)
-  #define COOLER_DEFAULT_TEMP     16  // (°C)
+  #define COOLER_MINTEMP          15  // (°C)
+  #define COOLER_MAXTEMP          25  // (°C)
+  #define COOLER_DEFAULT_TEMP     18  // (°C)
   #define TEMP_COOLER_HYSTERESIS   1  // (°C) Temperature proximity considered "close enough" to the target
-  #define COOLER_PIN               8  // Laser cooler on/off pin used to control power to the cooling element (e.g., TEC, External chiller via relay)
+  #define COOLER_PIN           P2_05  // Laser cooler on/off pin used to control power to the cooling element (e.g., TEC, External chiller via relay)
   #define COOLER_INVERTING     false
-  #define TEMP_COOLER_PIN         P0_25  // Laser/Cooler-circuit temperature sensor pin. ADC is required.
+  #define TEMP_COOLER_PIN      P0_25  // Laser/Cooler-circuit temperature sensor pin. ADC is required.
   #if TEMP_SENSOR_COOLER2
-    #define COOLER2                    // define if there is a 2 circuit cooling system
+    #define COOLER2                   // define if there is a 2 circuit cooling system
     #if ENABLED(COOLER2)
-      #define TEMP_COOLER2_PIN     P0_24 // Fan-circuit temperature sensor pin
-      #define COOLER_FAN_DIFF        3  //
+      #define TEMP_COOLER2_PIN  P0_24 // Fan-circuit temperature sensor pin
+      #define COOLER_FAN_DIFF      2  //
     #endif //COOLER2
   #endif
   #define COOLER_FAN                  // Enable a fan on the cooler, Fan# 0,1,2,3 etc.
@@ -622,7 +628,7 @@
 #define E7_AUTO_FAN_PIN -1
 #define CHAMBER_AUTO_FAN_PIN -1
 #define COOLER_AUTO_FAN_PIN -1
-#define COOLER_FAN_PIN -1
+#define COOLER_FAN_PIN P2_04
 
 #define EXTRUDER_AUTO_FAN_TEMPERATURE 50
 #define EXTRUDER_AUTO_FAN_SPEED 255   // 255 == full speed
@@ -1714,8 +1720,9 @@
   #define STATUS_HOTEND_ANIM          // Use a second bitmap to indicate hotend heating
   #define STATUS_BED_ANIM             // Use a second bitmap to indicate bed heating
   #define STATUS_CHAMBER_ANIM         // Use a second bitmap to indicate chamber heating
-  //#define STATUS_CUTTER_ANIM        // Use a second bitmap to indicate spindle / laser active
-  //#define STATUS_COOLER_ANIM        // Use a second bitmap to indicate laser cooling
+  #define STATUS_CUTTER_ANIM          // Use a second bitmap to indicate spindle / laser active
+  #define STATUS_COOLER_ANIM          // Use a second bitmap to indicate laser cooling
+  #define STATUS_COOLER2_ANIM         // Use a second bitmap to indicate second laser cooling 
   //#define STATUS_FLOWMETER_ANIM     // Use multiple bitmaps to indicate coolant flow
   //#define STATUS_ALT_BED_BITMAP     // Use the alternative bed bitmap
   //#define STATUS_ALT_FAN_BITMAP     // Use the alternative fan bitmap
@@ -3458,14 +3465,14 @@
 
   #define AIR_EVACUATION                     // Cutter Vacuum / Laser Blower motor control with G-codes M10-M11 //Benny 220203 #############################################################
   #if ENABLED(AIR_EVACUATION)
-    #define AIR_EVACUATION_ACTIVE       LOW    // Set to "HIGH" if the on/off function is active HIGH
-    #define AIR_EVACUATION_PIN        P1_00     // Override the default Cutter Vacuum or Laser Blower pin  //Benny 220203 #############################################################
+    #define AIR_EVACUATION_ACTIVE      HIGH  // Set to "HIGH" if the on/off function is active HIGH
+    #define AIR_EVACUATION_PIN        P1_00  // Override the default Cutter Vacuum or Laser Blower pin  //Benny 220203 #############################################################
   #endif
 
   #define AIR_ASSIST                         // Air Assist control with G-codes M8-M9 //Benny 220203 #############################################################
   #if ENABLED(AIR_ASSIST)
-    #define AIR_ASSIST_ACTIVE           LOW    // Active state on air assist pin
-    #define AIR_ASSIST_PIN            P2_04     // Override the default Air Assist pin //Benny 220203 #############################################################
+    #define AIR_ASSIST_ACTIVE         HIGH   // Active state on air assist pin
+    #define AIR_ASSIST_PIN            P2_07  // Override the default Air Assist pin //Benny 220203 #############################################################
   #endif
 
   //#define SPINDLE_SERVO                      // A servo converting an angle to spindle power
@@ -3481,7 +3488,7 @@
    *  - RPM     (S0 - S50000)  Best for use with a spindle
    *  - SERVO   (S0 - S180)
    */
-  #define CUTTER_POWER_UNIT PWM255
+  #define CUTTER_POWER_UNIT PERCENT
 
   /**
    * Relative Cutter Power
@@ -3523,7 +3530,7 @@
       #define SPEED_POWER_INTERCEPT       0    // (%) 0-100 i.e., Minimum power percentage
       #define SPEED_POWER_MIN             0    // (%) 0-100
       #define SPEED_POWER_MAX           100    // (%) 0-100
-      #define SPEED_POWER_STARTUP        80    // (%) M3/M4 speed/power default (with no arguments)
+      #define SPEED_POWER_STARTUP         0    // (%) M3/M4 speed/power default (with no arguments)
     #endif
 
     // Define the minimum and maximum test pulse time values for a laser test fire function //Benny 220203 #############################################################
@@ -3548,7 +3555,7 @@
        * - Ramps the power up every N steps to approximate the speed trapezoid.
        * - Due to the limited power resolution this is only approximate.
        */
-      #define LASER_POWER_INLINE_TRAPEZOID
+      // #define LASER_POWER_INLINE_TRAPEZOID
 
       /**
        * Continuously calculate the current power (nominal_power * current_rate / nominal_rate).
@@ -3559,7 +3566,7 @@
        * board isn't able to generate steps fast enough (and you are using LASER_POWER_INLINE_TRAPEZOID_CONT), increase this.
        * Note that when this is zero it means it occurs every cycle; 1 means a delay wait one cycle then run, etc.
        */
-      //#define LASER_POWER_INLINE_TRAPEZOID_CONT
+      #define LASER_POWER_INLINE_TRAPEZOID_CONT
 
       /**
        * Stepper iterations between power updates. Increase this value if the board
@@ -3576,7 +3583,7 @@
       #if ENABLED(LASER_MOVE_POWER)
         // Turn off the laser on G0 moves with no power parameter.
         // If a power parameter is provided, use that instead.
-        //#define LASER_MOVE_G0_OFF
+        //#define LASER_MOVE_G0_OFF //Benny 220203 #############################################################
 
         // Turn off the laser on G28 homing.
         #define LASER_MOVE_G28_OFF  //Benny 220203 #############################################################

@@ -456,7 +456,7 @@ PGMSTR(str_t_heating_failed, STR_T_HEATING_FAILED);
 
 #if HAS_TEMP_COOLER
   cooler_info_t Temperature::temp_cooler; // = { 0 }
-  #if HAS_TEMP_COOLER
+  #if HAS_TEMP_COOLER2
     cooler_info_t Temperature::temp_cooler2; // = { 0 }
   #endif
   #if HAS_COOLER
@@ -465,10 +465,17 @@ PGMSTR(str_t_heating_failed, STR_T_HEATING_FAILED);
     celsius_float_t previous_temp = 9999;
     int16_t Temperature::mintemp_raw_COOLER = TEMP_SENSOR_COOLER_RAW_LO_TEMP,
             Temperature::maxtemp_raw_COOLER = TEMP_SENSOR_COOLER_RAW_HI_TEMP;
+    #if HAS_COOLER2
+      int16_t Temperature::mintemp_raw_COOLER2 = TEMP_SENSOR_COOLER2_RAW_LO_TEMP,
+              Temperature::maxtemp_raw_COOLER2 = TEMP_SENSOR_COOLER2_RAW_HI_TEMP;
+    #endif
     #if WATCH_COOLER
       cooler_watch_t Temperature::watch_cooler{0};
     #endif
     millis_t Temperature::next_cooler_check_ms, Temperature::cooler_fan_flush_ms;
+    #if HAS_COOLER2
+      millis_t Temperature::next_cooler2_check_ms;
+    #endif
   #endif
 #endif
 
@@ -1659,9 +1666,9 @@ void Temperature::manage_heater() {
           if (temp_cooler2.celsius - COOLER_FAN_DIFF > temp_cooler.celsius){
             fan_cooler_pwm = (COOLER_FAN_BASE) + (COOLER_FAN_FACTOR) * ABS((temp_cooler2.celsius - COOLER_FAN_DIFF) - temp_cooler.celsius);
           }
-          else if (temp_cooler2.celsius - 1 > temp_cooler.celsius){
-            fan_cooler_pwm = (COOLER_FAN_BASE);
-          }
+          // else if (temp_cooler2.celsius - 1 > temp_cooler.celsius){
+          //   fan_cooler_pwm = (COOLER_FAN_BASE);
+          // }
           else{
             fan_cooler_pwm = 0;
           }
@@ -1676,7 +1683,7 @@ void Temperature::manage_heater() {
       if (flag_cooler_state) {
         flag_cooler_state = false;
         #if !ENABLED(COOLER2)
-          thermalManager.set_fan_speed(COOLER_FAN_INDEX, 0);
+          set_fan_speed(COOLER_FAN_INDEX, 0);
         #endif
       }
       WRITE_HEATER_COOLER(LOW);
@@ -2963,6 +2970,7 @@ void Temperature::update_raw_temperatures() {
   TERN_(HAS_TEMP_ADC_PROBE,   temp_probe.update());
   TERN_(HAS_TEMP_ADC_BOARD,   temp_board.update());
   TERN_(HAS_TEMP_ADC_COOLER,  temp_cooler.update());
+  TERN_(HAS_TEMP_ADC_COOLER2, temp_cooler2.update());
 
   TERN_(HAS_JOY_ADC_X, joystick.x.update());
   TERN_(HAS_JOY_ADC_Y, joystick.y.update());
@@ -2992,6 +3000,7 @@ void Temperature::readings_ready() {
   TERN_(HAS_TEMP_CHAMBER,   temp_chamber.reset());
   TERN_(HAS_TEMP_PROBE,     temp_probe.reset());
   TERN_(HAS_TEMP_COOLER,    temp_cooler.reset());
+  TERN_(HAS_TEMP_COOLER2,   temp_cooler2.reset());
   TERN_(HAS_TEMP_BOARD,     temp_board.reset());
   TERN_(HAS_TEMP_REDUNDANT, temp_redundant.reset());
 

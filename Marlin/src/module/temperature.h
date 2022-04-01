@@ -516,6 +516,14 @@ class Temperature {
       static millis_t next_cooler_check_ms, cooler_fan_flush_ms;
       static int16_t mintemp_raw_COOLER, maxtemp_raw_COOLER;
     #endif
+  	
+    #if HAS_COOLER2
+      #if ENABLED(WATCH_COOLER2)
+        static cooler_watch_t watch_cooler2;
+      #endif
+      static millis_t next_cooler2_check_ms; //, cooler_fan_flush_ms;
+      static int16_t mintemp_raw_COOLER2, maxtemp_raw_COOLER2;
+    #endif
 
     #if HAS_TEMP_BOARD && ENABLED(THERMAL_PROTECTION_BOARD)
       static int16_t mintemp_raw_BOARD, maxtemp_raw_BOARD;
@@ -848,6 +856,9 @@ class Temperature {
       #endif
       static celsius_float_t degCooler()   { return temp_cooler.celsius; }
       static celsius_t wholeDegCooler()    { return static_cast<celsius_t>(temp_cooler.celsius + 0.5f); }
+      #if HAS_TEMP_COOLER2
+        static celsius_t wholeDegCooler2()    { return static_cast<celsius_t>(temp_cooler2.celsius + 0.5f); }
+      #endif
       #if HAS_COOLER
         static celsius_t degTargetCooler() { return temp_cooler.target; }
         static bool isLaserHeating()       { return temp_cooler.target > temp_cooler.celsius; }

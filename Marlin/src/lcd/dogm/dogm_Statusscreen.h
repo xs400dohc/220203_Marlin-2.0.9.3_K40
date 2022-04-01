@@ -94,6 +94,16 @@
   #define STATUS_COOLER_BYTEWIDTH BW(STATUS_COOLER_WIDTH)
 #endif
 
+#if !STATUS_COOLER2_WIDTH && HAS_COOLER2
+  #include "status/cooler.h"
+#endif
+#ifndef STATUS_COOLER2_WIDTH
+  #define STATUS_COOLER2_WIDTH 0
+#endif
+#ifndef STATUS_COOLER2_BYTEWIDTH
+  #define STATUS_COOLER2_BYTEWIDTH BW(STATUS_COOLER2_WIDTH)
+#endif
+
 //
 // Laser Flowmeter
 //
@@ -579,6 +589,42 @@
 #endif
 
 //
+// Cooler2 Bitmap Properties
+//
+#if HAS_COOLER2
+  #if STATUS_COOLER2_WIDTH
+
+    #ifndef STATUS_COOLER2_X
+      #define STATUS_COOLER2_X (LCD_PIXEL_WIDTH - (STATUS_COOLER2_BYTEWIDTH + STATUS_COOLER_BYTEWIDTH + STATUS_FAN_BYTEWIDTH + STATUS_CUTTER_BYTEWIDTH) * 8)
+    #endif
+
+    #ifndef STATUS_COOLER2_HEIGHT
+      #define STATUS_COOLER2_HEIGHT(S) (sizeof(status_cooler2_bmp1) / (STATUS_COOLER2_BYTEWIDTH))
+    #endif
+
+    #ifndef STATUS_COOLER2_Y
+      #define STATUS_COOLER2_Y(S) (18 - STATUS_COOLER2_HEIGHT(S))
+    #endif
+
+    #ifndef STATUS_COOLER2_TEXT_X
+      #define STATUS_COOLER2_TEXT_X (STATUS_COOLER2_X + 12)
+    #endif
+
+    static_assert(
+      sizeof(status_cooler2_bmp1) == (STATUS_COOLER2_BYTEWIDTH) * STATUS_COOLER2_HEIGHT(0),
+      "Status cooler2 bitmap (status_cooler2_bmp1) dimensions don't match data."
+    );
+    #ifdef STATUS_COOLER2_ANIM
+      static_assert(
+        sizeof(status_cooler2_bmp2) == (STATUS_COOLER2_BYTEWIDTH) * STATUS_COOLER2_HEIGHT(1),
+        "Status cooler2 bitmap (status_cooler2_bmp2) dimensions don't match data."
+      );
+    #endif
+
+  #endif
+#endif
+
+//
 //  Flowmeter Bitmap Properties
 //
 #if ENABLED(LASER_COOLANT_FLOW_METER)
@@ -728,6 +774,9 @@
 #if HAS_COOLER
   #define DO_DRAW_COOLER 1
 #endif
+#if HAS_COOLER2
+  #define DO_DRAW_COOLER2 1
+#endif
 #if ENABLED(LASER_COOLANT_FLOW_METER)
   #define DO_DRAW_FLOWMETER 1
 #endif
@@ -755,6 +804,9 @@
 #endif
 #if BOTH(DO_DRAW_COOLER, STATUS_COOLER_ANIM)
   #define ANIM_COOLER 1
+#endif
+#if BOTH(DO_DRAW_COOLER2, STATUS_COOLER2_ANIM)
+  #define ANIM_COOLER2 1
 #endif
 #if BOTH(DO_DRAW_FLOWMETER, STATUS_FLOWMETER_ANIM)
   #define ANIM_FLOWMETER 1

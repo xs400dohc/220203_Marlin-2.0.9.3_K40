@@ -187,6 +187,9 @@ namespace ExtUI {
         #endif
         #if HAS_COOLER
           case COOLER: return;  // Cooler has no idle timer
+        #endif        
+        #if HAS_COOLER2
+          case COOLER2: return;  // Cooler2 has no idle timer
         #endif
         default:
           TERN_(HAS_HOTEND, thermalManager.reset_hotend_idle_timer(heater - H0));
@@ -997,6 +1000,9 @@ namespace ExtUI {
       #endif
       #if HAS_COOLER
         case COOLER: thermalManager.setTargetCooler(LROUND(constrain(value, 0, COOLER_MAXTEMP))); break;
+      #endif
+      #if HAS_COOLER2
+        case COOLER2: thermalManager.setTargetCooler2(LROUND(constrain(value, 0, COOLER2_MAXTEMP))); break;
       #endif
       #if HAS_HEATED_BED
         case BED: thermalManager.setTargetBed(LROUND(constrain(value, 0, BED_MAX_TARGET))); break;
