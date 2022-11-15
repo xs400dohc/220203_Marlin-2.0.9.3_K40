@@ -243,7 +243,7 @@
     #if ENABLED(COOLER2)
       #define TEMP_COOLER2_PIN  P0_24 // Fan-circuit temperature sensor pin
       #define COOLER_FAN_DIFF      2  //
-    #endif //COOLER2
+    #endif
   #endif
   #define COOLER_FAN                  // Enable a fan on the cooler, Fan# 0,1,2,3 etc.
   #define COOLER_FAN_INDEX         0  // FAN number 0, 1, 2 etc. e.g.

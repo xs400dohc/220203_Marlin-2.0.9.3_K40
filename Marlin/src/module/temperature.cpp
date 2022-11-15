@@ -1669,8 +1669,8 @@ void Temperature::manage_heater() {
           #if ENABLED(COOLER_FAN) //&& !ENABLED(COOLER2)
             set_fan_speed(COOLER_FAN_INDEX, temp_cooler.celsius > temp_cooler.target - 2 ? COOLER_FAN_BASE : 0);
           #endif
-          WRITE_HEATER_COOLER(LOW);
         }
+        WRITE_HEATER_COOLER(HIGH);
       }
     }
     else {
